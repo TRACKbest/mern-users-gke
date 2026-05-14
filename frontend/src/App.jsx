@@ -1,4 +1,5 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
@@ -7,13 +8,26 @@ import Dashboard from './pages/Dashboard';
 import AdminPanel from './pages/AdminPanel';
 import { useAuth } from './context/AuthContext';
 
+const LandingPage = lazy(() => import('./pages/LandingPage'));
+
 export default function App() {
   const { user } = useAuth();
+  const location = useLocation();
+
+  const showNavbar = location.pathname !== '/';
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
+      {showNavbar && <Navbar />}
       <Routes>
+        <Route
+          path="/"
+          element={
+            <Suspense fallback={<div className="min-h-screen bg-gray-950" />}>
+              <LandingPage />
+            </Suspense>
+          }
+        />
         <Route path="/login" element={user ? <Navigate to="/dashboard" /> : <Login />} />
         <Route path="/register" element={user ? <Navigate to="/dashboard" /> : <Register />} />
         <Route
@@ -32,7 +46,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="*" element={<Navigate to={user ? '/dashboard' : '/login'} />} />
+        <Route path="*" element={<Navigate to={user ? '/dashboard' : '/'} />} />
       </Routes>
     </div>
   );
