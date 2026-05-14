@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-init-scripts
+  namespace: mern-app
+data:
+  init-db.js: |
+    db = db.getSiblingDB('usermanagement');
+    db.createCollection('users');
+    db.users.createIndex({ email: 1 }, { unique: true });
+    db.users.insertOne({
+      name: "Admin",
+      email: "admin@example.com",
+      password: "$2a$12$LQv3c1yqBo9SkvXS7QTJp.EXnvZ3eL6e5m.gLVRmNR1I2mHmFeYCa",
+      role: "admin",
+      isActive: true,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
