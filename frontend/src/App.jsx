@@ -6,6 +6,9 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import AdminPanel from './pages/AdminPanel';
+import Agenda from './pages/Agenda';
+import TimeTracking from './pages/TimeTracking';
+import AdminTimeOverview from './pages/AdminTimeOverview';
 import { useAuth } from './context/AuthContext';
 
 const LandingPage = lazy(() => import('./pages/LandingPage'));
@@ -39,10 +42,34 @@ export default function App() {
           }
         />
         <Route
+          path="/agenda"
+          element={
+            <ProtectedRoute>
+              <Agenda />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/time-tracking"
+          element={
+            <ProtectedRoute>
+              <TimeTracking />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/admin"
           element={
             <ProtectedRoute roles={['admin']}>
               <AdminPanel />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/time"
+          element={
+            <ProtectedRoute roles={['admin']}>
+              <AdminTimeOverview />
             </ProtectedRoute>
           }
         />

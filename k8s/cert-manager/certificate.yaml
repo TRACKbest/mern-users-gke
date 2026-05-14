@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mern-app-tls
+  namespace: mern-app
+spec:
+  secretName: mern-app-tls-secret
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  # Remplacez <YOUR_EXTERNAL_IP> par l'IP statique de votre cluster GKE
+  # Exemple: 34.56.78.90.nip.io
+  dnsNames:
+    - "<YOUR_EXTERNAL_IP>.nip.io"

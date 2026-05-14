@@ -23,10 +23,21 @@ export default function Navbar() {
             <Link to="/dashboard" className="text-gray-700 hover:text-indigo-600 text-sm font-medium">
               Dashboard
             </Link>
+            <Link to="/agenda" className="text-gray-700 hover:text-indigo-600 text-sm font-medium">
+              Agenda
+            </Link>
+            <Link to="/time-tracking" className="text-gray-700 hover:text-indigo-600 text-sm font-medium">
+              Suivi Temps
+            </Link>
             {user.role === 'admin' && (
-              <Link to="/admin" className="text-gray-700 hover:text-indigo-600 text-sm font-medium">
-                Admin Panel
-              </Link>
+              <>
+                <Link to="/admin" className="text-gray-700 hover:text-indigo-600 text-sm font-medium">
+                  Admin Panel
+                </Link>
+                <Link to="/admin/time" className="text-gray-700 hover:text-indigo-600 text-sm font-medium">
+                  Temps (Admin)
+                </Link>
+              </>
             )}
           </div>
           <div className="flex items-center space-x-4">
