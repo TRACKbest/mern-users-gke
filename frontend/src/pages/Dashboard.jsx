@@ -100,10 +100,28 @@ export default function Dashboard() {
             </div>
             <div>
               <span className="text-sm font-medium text-gray-500">Role:</span>
-              <span className={`ml-2 px-2 py-1 text-xs rounded-full ${user?.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800'}`}>
-                {user?.role}
+              <span className={`ml-2 px-2 py-1 text-xs rounded-full ${user?.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}`}>
+                {user?.role === 'student' ? 'Étudiant' : user?.role}
               </span>
             </div>
+            {user?.studentId && (
+              <div>
+                <span className="text-sm font-medium text-gray-500">Numéro étudiant:</span>
+                <p className="text-gray-900">{user.studentId}</p>
+              </div>
+            )}
+            {user?.major && (
+              <div>
+                <span className="text-sm font-medium text-gray-500">Filière:</span>
+                <p className="text-gray-900">{user.major}</p>
+              </div>
+            )}
+            {user?.academicYear && (
+              <div>
+                <span className="text-sm font-medium text-gray-500">Année académique:</span>
+                <p className="text-gray-900">{user.academicYear}</p>
+              </div>
+            )}
             <div>
               <span className="text-sm font-medium text-gray-500">Member since:</span>
               <p className="text-gray-900">{new Date(user?.createdAt).toLocaleDateString()}</p>

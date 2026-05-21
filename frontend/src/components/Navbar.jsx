@@ -18,32 +18,32 @@ export default function Navbar() {
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center space-x-8">
             <Link to="/dashboard" className="text-xl font-bold text-indigo-600">
-              UserMgmt
+              GradeMgmt
             </Link>
             <Link to="/dashboard" className="text-gray-700 hover:text-indigo-600 text-sm font-medium">
               Dashboard
             </Link>
+            <Link to="/grades" className="text-gray-700 hover:text-indigo-600 text-sm font-medium">
+              Notes
+            </Link>
+            <Link to="/grades/stats" className="text-gray-700 hover:text-indigo-600 text-sm font-medium">
+              Statistiques
+            </Link>
             <Link to="/agenda" className="text-gray-700 hover:text-indigo-600 text-sm font-medium">
               Agenda
-            </Link>
-            <Link to="/time-tracking" className="text-gray-700 hover:text-indigo-600 text-sm font-medium">
-              Suivi Temps
             </Link>
             {user.role === 'admin' && (
               <>
                 <Link to="/admin" className="text-gray-700 hover:text-indigo-600 text-sm font-medium">
                   Admin Panel
                 </Link>
-                <Link to="/admin/time" className="text-gray-700 hover:text-indigo-600 text-sm font-medium">
-                  Temps (Admin)
-                </Link>
               </>
             )}
           </div>
           <div className="flex items-center space-x-4">
             <span className="text-sm text-gray-600">{user.name}</span>
-            <span className={`px-2 py-1 text-xs rounded-full ${user.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800'}`}>
-              {user.role}
+            <span className={`px-2 py-1 text-xs rounded-full ${user.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}`}>
+              {user.role === 'student' ? 'Étudiant' : user.role}
             </span>
             <button
               onClick={handleLogout}

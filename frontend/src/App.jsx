@@ -9,6 +9,8 @@ import AdminPanel from './pages/AdminPanel';
 import Agenda from './pages/Agenda';
 import TimeTracking from './pages/TimeTracking';
 import AdminTimeOverview from './pages/AdminTimeOverview';
+import GradesList from './pages/GradesList';
+import GradeStats from './pages/GradeStats';
 import { useAuth } from './context/AuthContext';
 
 const LandingPage = lazy(() => import('./pages/LandingPage'));
@@ -54,6 +56,22 @@ export default function App() {
           element={
             <ProtectedRoute>
               <TimeTracking />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/grades"
+          element={
+            <ProtectedRoute>
+              <GradesList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/grades/stats"
+          element={
+            <ProtectedRoute>
+              <GradeStats />
             </ProtectedRoute>
           }
         />

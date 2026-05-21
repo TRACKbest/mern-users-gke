@@ -30,12 +30,12 @@ export default function HeroSection() {
       {/* Content */}
       <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
         <h1 className="text-5xl md:text-7xl font-extrabold bg-gradient-to-r from-white via-indigo-200 to-purple-300 bg-clip-text text-transparent leading-tight">
-          Manage Users
+          Gérez Vos Notes
           <br />
-          Like Never Before
+          Universitaires
         </h1>
         <p className="mt-6 text-lg md:text-xl text-gray-400 max-w-2xl mx-auto">
-          A powerful, secure, and modern platform for user management with role-based access control, real-time analytics, and seamless integration.
+          Une plateforme moderne et simple pour suivre vos notes, calculer vos moyennes et organiser votre parcours académique.
         </p>
         <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
           <Link

@@ -6,32 +6,32 @@ export default function LandingNavbar() {
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center h-16">
         {/* Logo */}
         <Link to="/" className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-          UserFlow
+          GradeMgmt
         </Link>
 
         {/* Nav Links */}
         <div className="hidden md:flex items-center gap-8">
           <a href="#features" className="text-gray-300 hover:text-white transition-colors text-sm">
-            Features
+            Fonctionnalités
           </a>
           <a href="#testimonials" className="text-gray-300 hover:text-white transition-colors text-sm">
-            Testimonials
+            Témoignages
           </a>
           <a href="#pricing" className="text-gray-300 hover:text-white transition-colors text-sm">
-            Pricing
+            Tarifs
           </a>
         </div>
 
         {/* CTA */}
         <div className="flex items-center gap-4">
           <Link to="/login" className="text-gray-300 hover:text-white transition-colors text-sm font-medium">
-            Sign In
+            Connexion
           </Link>
           <Link
             to="/register"
             className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-white text-sm font-medium transition-all"
           >
-            Get Started
+            Commencer
           </Link>
         </div>
       </div>

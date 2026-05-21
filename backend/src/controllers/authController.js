@@ -6,7 +6,10 @@ const { generateAccessToken, generateRefreshToken } = require('../utils/tokenUti
 const validateRegister = [
   body('name').trim().notEmpty().withMessage('Name is required'),
   body('email').isEmail().withMessage('Valid email is required'),
-  body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
+  body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters'),
+  body('studentId').optional().trim().isLength({ max: 20 }).withMessage('Student ID must be less than 20 characters'),
+  body('major').optional().trim().isLength({ max: 100 }).withMessage('Major must be less than 100 characters'),
+  body('academicYear').optional().trim().isLength({ max: 20 }).withMessage('Academic year must be less than 20 characters')
 ];
 
 const validateLogin = [
@@ -21,14 +24,19 @@ const register = async (req, res, next) => {
       return res.status(400).json({ message: 'Validation failed', errors: errors.array() });
     }
 
-    const { name, email, password } = req.body;
+    const { name, email, password, studentId, major, academicYear } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(409).json({ message: 'Email already registered' });
     }
 
-    const user = await User.create({ name, email, password });
+    const userData = { name, email, password };
+    if (studentId) userData.studentId = studentId;
+    if (major) userData.major = major;
+    if (academicYear) userData.academicYear = academicYear;
+
+    const user = await User.create(userData);
 
     const accessToken = generateAccessToken(user._id);
     const refreshToken = generateRefreshToken(user._id);
