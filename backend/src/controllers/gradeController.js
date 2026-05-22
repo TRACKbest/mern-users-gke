@@ -1,200 +1,142 @@
-const { body, validationResult } = require('express-validator');
 const Grade = require('../models/Grade');
 
-const validateGrade = [
-  body('subject').trim().notEmpty().withMessage('Le sujet est requis').isLength({ max: 100 }),
-  body('grade').isFloat({ min: 0, max: 20 }).withMessage('La note doit être entre 0 et 20'),
-  body('semester').isIn(['Semestre 1', 'Semestre 2', 'Semestre 3', 'Semestre 4', 'Semestre 5', 'Semestre 6']),
-  body('academicYear').trim().notEmpty().withMessage("L'année académique est requise"),
-  body('coefficient').optional().isInt({ min: 1 }),
-  body('category').optional().isIn(['examen', 'devoir', 'projet', 'tp', 'partiel']),
-];
-
-const createGrade = async (req, res, next) => {
+// Get all grades for a user
+exports.getGrades = async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false, errors: errors.array() });
-    }
-
-    const grade = await Grade.create({
-      ...req.body,
-      student: req.user._id,
-    });
-
-    res.status(201).json({ success: true, data: grade });
+    const grades = await Grade.find({ user: req.user.id })
+      .sort({ createdAt: -1 });
+    res.json(grades);
   } catch (error) {
-    next(error);
+    res.status(500).json({ message: 'Error fetching grades', error: error.message });
   }
 };
 
-const getMyGrades = async (req, res, next) => {
+// Get a single grade by ID
+exports.getGradeById = async (req, res) => {
   try {
-    const { semester, academicYear, subject, page = 1, limit = 50 } = req.query;
-
-    const filter = { student: req.user._id };
-    if (semester) filter.semester = semester;
-    if (academicYear) filter.academicYear = academicYear;
-    if (subject) filter.subject = { $regex: subject, $options: 'i' };
-
-    const grades = await Grade.find(filter)
-      .sort({ createdAt: -1 })
-      .skip((page - 1) * limit)
-      .limit(Number(limit));
-
-    const total = await Grade.countDocuments(filter);
-
-    res.json({
-      success: true,
-      data: grades,
-      pagination: { page: Number(page), limit: Number(limit), total, pages: Math.ceil(total / limit) },
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-const getGradeById = async (req, res, next) => {
-  try {
-    const grade = await Grade.findOne({ _id: req.params.id, student: req.user._id });
+    const grade = await Grade.findOne({ _id: req.params.id, user: req.user.id });
     if (!grade) {
-      return res.status(404).json({ success: false, message: 'Note non trouvée' });
+      return res.status(404).json({ message: 'Grade not found' });
     }
-    res.json({ success: true, data: grade });
+    res.json(grade);
   } catch (error) {
-    next(error);
+    res.status(500).json({ message: 'Error fetching grade', error: error.message });
   }
 };
 
-const updateGrade = async (req, res, next) => {
+// Create a new grade
+exports.createGrade = async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false, errors: errors.array() });
+    const gradeData = {
+      ...req.body,
+      user: req.user.id
+    };
+    
+    // Validate required fields
+    if (!gradeData.subject || !gradeData.grade || !gradeData.coefficient || !gradeData.semester || !gradeData.academicYear) {
+      return res.status(400).json({ message: 'All fields are required' });
     }
+    
+    // Validate grade range
+    const gradeValue = parseFloat(gradeData.grade);
+    if (isNaN(gradeValue) || gradeValue < 0 || gradeValue > 20) {
+      return res.status(400).json({ message: 'Grade must be between 0 and 20' });
+    }
+    
+    // Validate coefficient
+    const coefficientValue = parseInt(gradeData.coefficient);
+    if (isNaN(coefficientValue) || coefficientValue < 1) {
+      return res.status(400).json({ message: 'Coefficient must be at least 1' });
+    }
+    
+    const grade = await Grade.create(gradeData);
+    res.status(201).json(grade);
+  } catch (error) {
+    console.error('Error creating grade:', error);
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ message: 'Validation error', details: error.message });
+    }
+    res.status(500).json({ message: 'Error creating grade', error: error.message });
+  }
+};
 
+// Update a grade
+exports.updateGrade = async (req, res) => {
+  try {
     const grade = await Grade.findOneAndUpdate(
-      { _id: req.params.id, student: req.user._id },
+      { _id: req.params.id, user: req.user.id },
       req.body,
       { new: true, runValidators: true }
     );
-
     if (!grade) {
-      return res.status(404).json({ success: false, message: 'Note non trouvée' });
+      return res.status(404).json({ message: 'Grade not found' });
     }
-
-    res.json({ success: true, data: grade });
+    res.json(grade);
   } catch (error) {
-    next(error);
+    res.status(400).json({ message: 'Error updating grade', error: error.message });
   }
 };
 
-const deleteGrade = async (req, res, next) => {
+// Delete a grade
+exports.deleteGrade = async (req, res) => {
   try {
-    const grade = await Grade.findOneAndDelete({ _id: req.params.id, student: req.user._id });
+    const grade = await Grade.findOneAndDelete({ _id: req.params.id, user: req.user.id });
     if (!grade) {
-      return res.status(404).json({ success: false, message: 'Note non trouvée' });
+      return res.status(404).json({ message: 'Grade not found' });
     }
-    res.json({ success: true, message: 'Note supprimée' });
+    res.json({ message: 'Grade deleted successfully' });
   } catch (error) {
-    next(error);
+    res.status(500).json({ message: 'Error deleting grade', error: error.message });
   }
 };
 
-const getGradeStats = async (req, res, next) => {
+// Get grade statistics
+exports.getGradeStats = async (req, res) => {
   try {
-    const { semester, academicYear } = req.query;
-
-    const filter = { student: req.user._id };
-    if (semester) filter.semester = semester;
-    if (academicYear) filter.academicYear = academicYear;
-
-    const grades = await Grade.find(filter);
-
+    const grades = await Grade.find({ user: req.user.id });
+    
     if (grades.length === 0) {
       return res.json({
-        success: true,
-        data: {
-          average: 0,
-          totalGrades: 0,
-          subjects: [],
-          semester: semester || 'Tous',
-          academicYear: academicYear || 'Toutes',
-        },
+        average: 0,
+        total: 0,
+        bySemester: {}
       });
     }
 
-    const totalWeighted = grades.reduce((sum, grade) => sum + grade.grade * grade.coefficient, 0);
-    const totalCoefficient = grades.reduce((sum, grade) => sum + grade.coefficient, 0);
-    const average = totalWeighted / totalCoefficient;
+    let totalWeighted = 0;
+    let totalCoefficient = 0;
+    const bySemester = {};
 
-    const subjectStats = {};
     grades.forEach(grade => {
-      if (!subjectStats[grade.subject]) {
-        subjectStats[grade.subject] = {
-          grades: [],
-          totalCoefficient: 0,
+      const weighted = grade.grade * grade.coefficient;
+      totalWeighted += weighted;
+      totalCoefficient += grade.coefficient;
+
+      if (!bySemester[grade.semester]) {
+        bySemester[grade.semester] = {
+          total: 0,
+          count: 0,
+          grades: []
         };
       }
-      subjectStats[grade.subject].grades.push(grade.grade);
-      subjectStats[grade.subject].totalCoefficient += grade.coefficient;
+      bySemester[grade.semester].total += grade.grade;
+      bySemester[grade.semester].count += 1;
+      bySemester[grade.semester].grades.push(grade.grade);
     });
 
-    const subjects = Object.keys(subjectStats).map(subject => ({
-      name: subject,
-      average: subjectStats[subject].grades.reduce((a, b) => a + b, 0) / subjectStats[subject].grades.length,
-      count: subjectStats[subject].grades.length,
-    }));
+    // Calculate averages per semester
+    Object.keys(bySemester).forEach(semester => {
+      bySemester[semester].average = bySemester[semester].total / bySemester[semester].count;
+    });
+
+    const average = totalCoefficient > 0 ? totalWeighted / totalCoefficient : 0;
 
     res.json({
-      success: true,
-      data: {
-        average: Math.round(average * 100) / 100,
-        totalGrades: grades.length,
-        subjects,
-        semester: semester || 'Tous',
-        academicYear: academicYear || 'Toutes',
-      },
+      average: Math.round(average * 100) / 100,
+      total: grades.length,
+      bySemester
     });
   } catch (error) {
-    next(error);
+    res.status(500).json({ message: 'Error calculating statistics', error: error.message });
   }
-};
-
-const getAllGrades = async (req, res, next) => {
-  try {
-    const { studentId, semester, academicYear, page = 1, limit = 50 } = req.query;
-
-    const filter = {};
-    if (studentId) filter.student = studentId;
-    if (semester) filter.semester = semester;
-    if (academicYear) filter.academicYear = academicYear;
-
-    const grades = await Grade.find(filter)
-      .populate('student', 'name email studentId major academicYear')
-      .sort({ createdAt: -1 })
-      .skip((page - 1) * limit)
-      .limit(Number(limit));
-
-    const total = await Grade.countDocuments(filter);
-
-    res.json({
-      success: true,
-      data: grades,
-      pagination: { page: Number(page), limit: Number(limit), total, pages: Math.ceil(total / limit) },
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-module.exports = {
-  validateGrade,
-  createGrade,
-  getMyGrades,
-  getGradeById,
-  updateGrade,
-  deleteGrade,
-  getGradeStats,
-  getAllGrades,
 };

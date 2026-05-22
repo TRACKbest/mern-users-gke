@@ -1,24 +1,28 @@
 const express = require('express');
 const router = express.Router();
-const { protect } = require('../middleware/auth');
-const { authorize } = require('../middleware/roleCheck');
 const {
-  validateGrade,
-  createGrade,
-  getMyGrades,
+  getGrades,
   getGradeById,
+  createGrade,
   updateGrade,
   deleteGrade,
-  getGradeStats,
-  getAllGrades,
+  getGradeStats
 } = require('../controllers/gradeController');
+const { protect } = require('../middleware/auth');
 
-router.post('/', protect, validateGrade, createGrade);
-router.get('/', protect, getMyGrades);
-router.get('/stats', protect, getGradeStats);
-router.get('/all', protect, authorize('admin'), getAllGrades);
-router.get('/:id', protect, getGradeById);
-router.put('/:id', protect, validateGrade, updateGrade);
-router.delete('/:id', protect, deleteGrade);
+// All routes require authentication
+router.use(protect);
+
+router.route('/')
+  .get(getGrades)
+  .post(createGrade);
+
+router.route('/stats')
+  .get(getGradeStats);
+
+router.route('/:id')
+  .get(getGradeById)
+  .put(updateGrade)
+  .delete(deleteGrade);
 
 module.exports = router;

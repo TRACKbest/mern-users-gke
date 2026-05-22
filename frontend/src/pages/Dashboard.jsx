@@ -26,7 +26,7 @@ export default function Dashboard() {
 
   return (
     <div className="max-w-4xl mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">Dashboard</h1>
+      <h1 className="text-3xl font-bold text-gray-900 mb-8">Grade Dashboard</h1>
 
       <div className="bg-white shadow rounded-lg p-6">
         <div className="flex items-center justify-between mb-6">
@@ -34,7 +34,7 @@ export default function Dashboard() {
           {!editing && (
             <button
               onClick={() => setEditing(true)}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 text-sm"
+              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm"
             >
               Edit Profile
             </button>
@@ -60,7 +60,7 @@ export default function Dashboard() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
               />
             </div>
             <div>
@@ -69,13 +69,13 @@ export default function Dashboard() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
               />
             </div>
             <div className="flex space-x-3">
               <button
                 type="submit"
-                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 text-sm"
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm"
               >
                 Save Changes
               </button>
@@ -100,28 +100,10 @@ export default function Dashboard() {
             </div>
             <div>
               <span className="text-sm font-medium text-gray-500">Role:</span>
-              <span className={`ml-2 px-2 py-1 text-xs rounded-full ${user?.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}`}>
-                {user?.role === 'student' ? 'Étudiant' : user?.role}
+              <span className={`ml-2 px-2 py-1 text-xs rounded-full ${user?.role === 'admin' ? 'bg-green-100 text-green-800' : 'bg-green-50 text-green-700'}`}>
+                {user?.role}
               </span>
             </div>
-            {user?.studentId && (
-              <div>
-                <span className="text-sm font-medium text-gray-500">Numéro étudiant:</span>
-                <p className="text-gray-900">{user.studentId}</p>
-              </div>
-            )}
-            {user?.major && (
-              <div>
-                <span className="text-sm font-medium text-gray-500">Filière:</span>
-                <p className="text-gray-900">{user.major}</p>
-              </div>
-            )}
-            {user?.academicYear && (
-              <div>
-                <span className="text-sm font-medium text-gray-500">Année académique:</span>
-                <p className="text-gray-900">{user.academicYear}</p>
-              </div>
-            )}
             <div>
               <span className="text-sm font-medium text-gray-500">Member since:</span>
               <p className="text-gray-900">{new Date(user?.createdAt).toLocaleDateString()}</p>

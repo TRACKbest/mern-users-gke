@@ -1,15 +1,35 @@
-import api from './api';
+import axios from 'axios';
 
-export const getGrades = (params) => api.get('/grades', { params });
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
-export const createGrade = (data) => api.post('/grades', data);
+const gradeService = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
-export const updateGrade = (id, data) => api.put(`/grades/${id}`, data);
+// Add token to requests
+gradeService.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
-export const deleteGrade = (id) => api.delete(`/grades/${id}`);
+export const getGrades = () => gradeService.get('/grades');
+export const getGradeById = (id) => gradeService.get(`/grades/${id}`);
+export const createGrade = (gradeData) => gradeService.post('/grades', gradeData);
+export const updateGrade = (id, gradeData) => gradeService.put(`/grades/${id}`, gradeData);
+export const deleteGrade = (id) => gradeService.delete(`/grades/${id}`);
+export const getGradeStats = () => gradeService.get('/grades/stats');
 
-export const getGradeById = (id) => api.get(`/grades/${id}`);
-
-export const getGradeStats = (params) => api.get('/grades/stats', { params });
-
-export const getAllGrades = (params) => api.get('/grades/all', { params });
+export default {
+  getGrades,
+  getGradeById,
+  createGrade,
+  updateGrade,
+  deleteGrade,
+  getGradeStats
+};

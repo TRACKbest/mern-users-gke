@@ -29,18 +29,18 @@ export default function HeroSection() {
 
       {/* Content */}
       <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
-        <h1 className="text-5xl md:text-7xl font-extrabold bg-gradient-to-r from-white via-indigo-200 to-purple-300 bg-clip-text text-transparent leading-tight">
-          Gérez Vos Notes
+        <h1 className="text-5xl md:text-7xl font-extrabold bg-gradient-to-r from-white via-green-200 to-emerald-300 bg-clip-text text-transparent leading-tight">
+          Manage Your Grades
           <br />
-          Universitaires
+          Effortlessly
         </h1>
         <p className="mt-6 text-lg md:text-xl text-gray-400 max-w-2xl mx-auto">
-          Une plateforme moderne et simple pour suivre vos notes, calculer vos moyennes et organiser votre parcours académique.
+          A modern and simple platform to track university grades, calculate averages, and organize your academic journey efficiently.
         </p>
         <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             to="/register"
-            className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 rounded-xl text-white font-semibold text-lg shadow-lg shadow-indigo-500/25 transition-all hover:shadow-indigo-500/40 hover:scale-105"
+            className="px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 rounded-xl text-white font-semibold text-lg shadow-lg shadow-green-500/25 transition-all hover:shadow-green-500/40 hover:scale-105"
           >
             Get Started Free
           </Link>

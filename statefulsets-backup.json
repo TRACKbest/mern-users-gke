@@ -1,0 +1,190 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "apps/v1",
+            "kind": "StatefulSet",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"StatefulSet\",\"metadata\":{\"annotations\":{},\"name\":\"mongodb\",\"namespace\":\"mern-app\"},\"spec\":{\"replicas\":1,\"selector\":{\"matchLabels\":{\"app\":\"mongodb\"}},\"serviceName\":\"mongodb-service\",\"template\":{\"metadata\":{\"labels\":{\"app\":\"mongodb\"}},\"spec\":{\"containers\":[{\"env\":[{\"name\":\"MONGO_INITDB_ROOT_USERNAME\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"MONGO_INITDB_ROOT_USERNAME\",\"name\":\"app-secrets\"}}},{\"name\":\"MONGO_INITDB_ROOT_PASSWORD\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"MONGO_INITDB_ROOT_PASSWORD\",\"name\":\"app-secrets\"}}}],\"image\":\"mongo:7.0\",\"livenessProbe\":{\"exec\":{\"command\":[\"mongosh\",\"--eval\",\"db.adminCommand('ping')\"]},\"failureThreshold\":3,\"initialDelaySeconds\":60,\"periodSeconds\":10,\"timeoutSeconds\":15},\"name\":\"mongodb\",\"ports\":[{\"containerPort\":27017}],\"readinessProbe\":{\"exec\":{\"command\":[\"mongosh\",\"--eval\",\"db.adminCommand('ping')\"]},\"failureThreshold\":3,\"initialDelaySeconds\":30,\"periodSeconds\":10,\"timeoutSeconds\":15},\"resources\":{\"limits\":{\"cpu\":\"500m\",\"memory\":\"512Mi\"},\"requests\":{\"cpu\":\"100m\",\"memory\":\"256Mi\"}},\"volumeMounts\":[{\"mountPath\":\"/data/db\",\"name\":\"mongodb-data\"},{\"mountPath\":\"/docker-entrypoint-initdb.d\",\"name\":\"mongo-init\"}]}],\"volumes\":[{\"configMap\":{\"name\":\"mongo-init-scripts\"},\"name\":\"mongo-init\"}]}},\"volumeClaimTemplates\":[{\"metadata\":{\"name\":\"mongodb-data\"},\"spec\":{\"accessModes\":[\"ReadWriteOnce\"],\"resources\":{\"requests\":{\"storage\":\"5Gi\"}},\"storageClassName\":\"standard-rwo\"}}]}}\n"
+                },
+                "creationTimestamp": "2026-05-15T08:46:54Z",
+                "generation": 15,
+                "name": "mongodb",
+                "namespace": "mern-app",
+                "resourceVersion": "1779468543131151011",
+                "uid": "25016e84-13af-42e4-8a86-e160bae7d627"
+            },
+            "spec": {
+                "persistentVolumeClaimRetentionPolicy": {
+                    "whenDeleted": "Retain",
+                    "whenScaled": "Retain"
+                },
+                "podManagementPolicy": "OrderedReady",
+                "replicas": 1,
+                "revisionHistoryLimit": 10,
+                "selector": {
+                    "matchLabels": {
+                        "app": "mongodb"
+                    }
+                },
+                "serviceName": "mongodb-service",
+                "template": {
+                    "metadata": {
+                        "annotations": {
+                            "kubectl.kubernetes.io/restartedAt": "2026-05-15T09:41:31Z"
+                        },
+                        "labels": {
+                            "app": "mongodb"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "env": [
+                                    {
+                                        "name": "MONGO_INITDB_ROOT_USERNAME",
+                                        "valueFrom": {
+                                            "secretKeyRef": {
+                                                "key": "MONGO_INITDB_ROOT_USERNAME",
+                                                "name": "app-secrets"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "name": "MONGO_INITDB_ROOT_PASSWORD",
+                                        "valueFrom": {
+                                            "secretKeyRef": {
+                                                "key": "MONGO_INITDB_ROOT_PASSWORD",
+                                                "name": "app-secrets"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "image": "mongo:7.0",
+                                "imagePullPolicy": "IfNotPresent",
+                                "livenessProbe": {
+                                    "exec": {
+                                        "command": [
+                                            "mongosh",
+                                            "--eval",
+                                            "db.adminCommand('ping')"
+                                        ]
+                                    },
+                                    "failureThreshold": 3,
+                                    "initialDelaySeconds": 60,
+                                    "periodSeconds": 10,
+                                    "successThreshold": 1,
+                                    "timeoutSeconds": 15
+                                },
+                                "name": "mongodb",
+                                "ports": [
+                                    {
+                                        "containerPort": 27017,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "readinessProbe": {
+                                    "exec": {
+                                        "command": [
+                                            "mongosh",
+                                            "--eval",
+                                            "db.adminCommand('ping')"
+                                        ]
+                                    },
+                                    "failureThreshold": 3,
+                                    "initialDelaySeconds": 30,
+                                    "periodSeconds": 10,
+                                    "successThreshold": 1,
+                                    "timeoutSeconds": 15
+                                },
+                                "resources": {
+                                    "limits": {
+                                        "cpu": "500m",
+                                        "memory": "512Mi"
+                                    },
+                                    "requests": {
+                                        "cpu": "100m",
+                                        "memory": "256Mi"
+                                    }
+                                },
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File",
+                                "volumeMounts": [
+                                    {
+                                        "mountPath": "/data/db",
+                                        "name": "mongodb-data"
+                                    },
+                                    {
+                                        "mountPath": "/docker-entrypoint-initdb.d",
+                                        "name": "mongo-init"
+                                    }
+                                ]
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {},
+                        "terminationGracePeriodSeconds": 30,
+                        "volumes": [
+                            {
+                                "configMap": {
+                                    "defaultMode": 420,
+                                    "name": "mongo-init-scripts"
+                                },
+                                "name": "mongo-init"
+                            }
+                        ]
+                    }
+                },
+                "updateStrategy": {
+                    "rollingUpdate": {
+                        "maxUnavailable": 1,
+                        "partition": 0
+                    },
+                    "type": "RollingUpdate"
+                },
+                "volumeClaimTemplates": [
+                    {
+                        "apiVersion": "v1",
+                        "kind": "PersistentVolumeClaim",
+                        "metadata": {
+                            "name": "mongodb-data"
+                        },
+                        "spec": {
+                            "accessModes": [
+                                "ReadWriteOnce"
+                            ],
+                            "resources": {
+                                "requests": {
+                                    "storage": "5Gi"
+                                }
+                            },
+                            "storageClassName": "standard-rwo",
+                            "volumeMode": "Filesystem"
+                        },
+                        "status": {
+                            "phase": "Pending"
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "availableReplicas": 1,
+                "collisionCount": 0,
+                "currentReplicas": 1,
+                "currentRevision": "mongodb-5565d785db",
+                "observedGeneration": 15,
+                "readyReplicas": 1,
+                "replicas": 1,
+                "updateRevision": "mongodb-5565d785db",
+                "updatedReplicas": 1
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}

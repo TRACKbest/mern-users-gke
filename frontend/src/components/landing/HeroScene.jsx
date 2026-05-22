@@ -14,8 +14,8 @@ function FloatingIcosahedron() {
       <mesh ref={meshRef}>
         <icosahedronGeometry args={[1.5, 4]} />
         <MeshDistortMaterial
-          color="#6366f1"
-          emissive="#4f46e5"
+          color="#22c55e"
+          emissive="#16a34a"
           emissiveIntensity={0.3}
           roughness={0.2}
           metalness={0.8}
@@ -38,7 +38,7 @@ function OrbitingTorusKnot() {
   return (
     <mesh ref={meshRef} position={[3, 1, -2]}>
       <torusKnotGeometry args={[0.6, 0.2, 128, 32]} />
-      <meshStandardMaterial color="#a855f7" wireframe />
+      <meshStandardMaterial color="#10b981" wireframe />
     </mesh>
   );
 }
@@ -71,19 +71,19 @@ export default function HeroScene() {
   return (
     <>
       <ambientLight intensity={0.2} />
-      <pointLight position={[5, 5, 5]} intensity={1} color="#6366f1" />
-      <pointLight position={[-5, -5, -5]} intensity={0.5} color="#a855f7" />
+      <pointLight position={[5, 5, 5]} intensity={1} color="#22c55e" />
+      <pointLight position={[-5, -5, -5]} intensity={0.5} color="#10b981" />
       <spotLight position={[0, 10, 0]} intensity={0.3} angle={0.5} penumbra={1} />
 
       <FloatingIcosahedron />
       <OrbitingTorusKnot />
 
-      <FloatingOctahedron position={[-3, 2, -1]} speed={0.8} color="#818cf8" />
-      <FloatingOctahedron position={[2, -2, 1]} speed={1.2} color="#a78bfa" />
-      <FloatingOctahedron position={[-2, -1, 2]} speed={0.6} color="#6366f1" />
-      <FloatingOctahedron position={[3.5, -1, -1]} speed={1.0} color="#c084fc" />
+      <FloatingOctahedron position={[-3, 2, -1]} speed={0.8} color="#4ade80" />
+      <FloatingOctahedron position={[2, -2, 1]} speed={1.2} color="#34d399" />
+      <FloatingOctahedron position={[-2, -1, 2]} speed={0.6} color="#22c55e" />
+      <FloatingOctahedron position={[3.5, -1, -1]} speed={1.0} color="#10b981" />
 
-      <Sparkles count={100} scale={12} size={1.5} speed={0.3} color="#818cf8" />
+      <Sparkles count={100} scale={12} size={1.5} speed={0.3} color="#4ade80" />
     </>
   );
 }

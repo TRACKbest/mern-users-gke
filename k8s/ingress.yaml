@@ -4,35 +4,40 @@ metadata:
   name: mern-ingress
   namespace: mern-app
   annotations:
-    kubernetes.io/ingress.class: "gce"
-    kubernetes.io/ingress.global-static-ip-name: "mern-app-ip"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    kubernetes.io/ingress.allow-http: "false"
+    kubernetes.io/ingress.allow-http: "true"
 spec:
-  tls:
-    - hosts:
-        # Remplacez <YOUR_EXTERNAL_IP> par votre IP statique GKE
-        - "<YOUR_EXTERNAL_IP>.nip.io"
-      secretName: mern-app-tls-secret
-  defaultBackend:
-    service:
-      name: frontend-service
-      port:
-        number: 80
+  ingressClassName: "nginx"
   rules:
-    # Remplacez <YOUR_EXTERNAL_IP> par votre IP statique GKE
-    - host: "<YOUR_EXTERNAL_IP>.nip.io"
-      http:
+    # Accès direct par IP
+    - http:
         paths:
-          - path: /api/*
-            pathType: ImplementationSpecific
+          - path: /api
+            pathType: Prefix
             backend:
               service:
                 name: backend-service
                 port:
                   number: 5000
-          - path: /*
-            pathType: ImplementationSpecific
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-service
+                port:
+                  number: 80
+    # Accès par domaine
+    - host: "104.155.122.241.nip.io"
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-service
+                port:
+                  number: 5000
+          - path: /
+            pathType: Prefix
             backend:
               service:
                 name: frontend-service

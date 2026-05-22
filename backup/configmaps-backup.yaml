@@ -1,0 +1,87 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  data:
+    CORS_ORIGIN: '*'
+    JWT_EXPIRE: 15m
+    JWT_REFRESH_EXPIRE: 7d
+    NODE_ENV: production
+    PORT: "5000"
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"CORS_ORIGIN":"*","JWT_EXPIRE":"15m","JWT_REFRESH_EXPIRE":"7d","NODE_ENV":"production","PORT":"5000"},"kind":"ConfigMap","metadata":{"annotations":{},"name":"app-config","namespace":"mern-app"}}
+    creationTimestamp: "2026-05-15T08:46:49Z"
+    name: app-config
+    namespace: mern-app
+    resourceVersion: "1778834809800687014"
+    uid: 0a8701b6-654b-400a-baa4-f5ada3b62c75
+- apiVersion: v1
+  data:
+    ca.crt: |
+      -----BEGIN CERTIFICATE-----
+      MIIELDCCApSgAwIBAgIQDkLiOqcBNLFXawyIvVEpzTANBgkqhkiG9w0BAQsFADAv
+      MS0wKwYDVQQDEyQ4MjhlMzk3Zi05MjAxLTQwNzgtOGVlZS1jNTVhMWZiN2ZkOWIw
+      IBcNMjYwNTE1MDczNjMwWhgPMjA1NjA1MDcwODM2MzBaMC8xLTArBgNVBAMTJDgy
+      OGUzOTdmLTkyMDEtNDA3OC04ZWVlLWM1NWExZmI3ZmQ5YjCCAaIwDQYJKoZIhvcN
+      AQEBBQADggGPADCCAYoCggGBALnO930DzcXN/+OQKUqqU4c1+ygfcfCiWz/jv99h
+      GXVgnXGrVej85Lv2VWEASPODurSRpe/WpwVHLithMQcHBQf6GI3OJIDjpwIzARFu
+      34YNH1SICzuOkeQ3DEzsMbILQpcGvk4ClhpNdqqaZs/Z5HYx7bWnWppoq38w/vuZ
+      C0Gqcv059qsGJsYd1H1+Vq0On4/d75lTvcS91cUg9uEBXd/EqWhq8TS05dXBjd4q
+      AzOcenHBttKOVpiw+la5Rywd5VUlooVHVT+Gq9wHKaN7gA8R84G/5KLruuuZVTeV
+      PlNM22Fa8rHpqZAuWOM2og+Po79rSjtaTyDbLIUf3KzUF95s3L4UjPH2WhH6XX2G
+      u6/mobjOmVDwV8zwxUwYd3xIhyt1PeAEXKcF6gRbKt1eAEKL5BZ9ghm/WGGLV5j6
+      105DSha1AwESIqacdjGxwUXWx1HXWY4mqVibV0hSgUEHAIZSMJMXwE0pXroHdUJt
+      iPQsEF2KTfCemEFxFa6MyAYLvwIDAQABo0IwQDAOBgNVHQ8BAf8EBAMCAgQwDwYD
+      VR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUJaFi+oDox7ssSf6+y3vMC46Lv+cwDQYJ
+      KoZIhvcNAQELBQADggGBAKKdgPcH/OeBPmP2q+H0RPRWj3zNTpH1xMDz9DYQxN1P
+      W9F1zGwN/ggDyOGPQLzYXGb6OQhufI++YPaoBMjz00BHt7Gp7xq1ranw3UdCn1RJ
+      TWit8/eWV53rCA3DyXwPwgo/bWwudrg7vGHkeFOZ74++3XR/mWKrpoQ/qYxAGwZY
+      ADJH1bODaJQKPQnExFGhxSDppF2NyItUBV7jojaB0fG6eoL1rNY/B3sxwcMxD3kR
+      Pjrj3J6CyrIItu2QQbUUtCPwOCXFO0a2Wf2oSeSJwQfAVtbs6kKjyJNuiRFVnCLD
+      SBodDyH6JwxhF50cCgsVHTBs+I0//OWH2t2KqIwkfl6o1MIOivZzA2f4OU3nRuxK
+      ZUAd/5UANojB5dPpfHxc8HmF7sDO/thaSnzh40HxPXmf/pbhQZAFerdeFDGIjZDP
+      CxpsF1mpLnowsqBDEw3Q6Sux8OgkL537AwPxqoK7rr/EzH9LD5Wq1cfd6TlR1Vl6
+      UeLfp/QqUM/ISRG24WEf7w==
+      -----END CERTIFICATE-----
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubernetes.io/description: Contains a CA bundle that can be used to verify the
+        kube-apiserver when using internal endpoints such as the internal service
+        IP or kubernetes.default.svc. No other usage is guaranteed across distributions
+        of Kubernetes clusters.
+    creationTimestamp: "2026-05-15T08:46:45Z"
+    name: kube-root-ca.crt
+    namespace: mern-app
+    resourceVersion: "1778834805100175006"
+    uid: bdd86ab9-d77a-4bda-a1fc-dc7b6275a377
+- apiVersion: v1
+  data:
+    init-db.js: |
+      db = db.getSiblingDB('usermanagement');
+      db.createCollection('users');
+      db.users.createIndex({ email: 1 }, { unique: true });
+      db.users.insertOne({
+        name: "Admin",
+        email: "admin@example.com",
+        password: "$2a$12$LQv3c1yqBo9SkvXS7QTJp.EXnvZ3eL6e5m.gLVRmNR1I2mHmFeYCa",
+        role: "admin",
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      });
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"init-db.js":"db = db.getSiblingDB('usermanagement');\ndb.createCollection('users');\ndb.users.createIndex({ email: 1 }, { unique: true });\ndb.users.insertOne({\n  name: \"Admin\",\n  email: \"admin@example.com\",\n  password: \"$2a$12$LQv3c1yqBo9SkvXS7QTJp.EXnvZ3eL6e5m.gLVRmNR1I2mHmFeYCa\",\n  role: \"admin\",\n  isActive: true,\n  createdAt: new Date(),\n  updatedAt: new Date()\n});\n"},"kind":"ConfigMap","metadata":{"annotations":{},"name":"mongo-init-scripts","namespace":"mern-app"}}
+    creationTimestamp: "2026-05-15T08:46:53Z"
+    name: mongo-init-scripts
+    namespace: mern-app
+    resourceVersion: "1778834813415855019"
+    uid: f718cc3a-38b0-4f47-947d-538fda4d8a30
+kind: List
+metadata:
+  resourceVersion: ""

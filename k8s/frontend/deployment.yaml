@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: us-central1-docker.pkg.dev/alex-496108/mern-app/frontend:latest
+          image: europe-west1-docker.pkg.dev/alex-496108/mern-app/frontend:latest
           ports:
             - containerPort: 80
           resources:

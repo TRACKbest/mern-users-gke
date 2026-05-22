@@ -23,8 +23,8 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['student', 'admin'],
-    default: 'student'
+    enum: ['user', 'admin'],
+    default: 'user'
   },
   isActive: {
     type: Boolean,
@@ -33,21 +33,6 @@ const userSchema = new mongoose.Schema({
   refreshToken: {
     type: String,
     select: false
-  },
-  studentId: {
-    type: String,
-    trim: true,
-    maxlength: [20, 'L\'identifiant étudiant ne peut pas dépasser 20 caractères']
-  },
-  major: {
-    type: String,
-    trim: true,
-    maxlength: [100, 'La filière ne peut pas dépasser 100 caractères']
-  },
-  academicYear: {
-    type: String,
-    trim: true,
-    maxlength: [20, 'L\'année académique ne peut pas dépasser 20 caractères']
   }
 }, { timestamps: true });
 
